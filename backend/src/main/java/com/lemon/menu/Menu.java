@@ -26,6 +26,7 @@ public class Menu {
     @Column(nullable = false, length = 20)
     private String base;
 
+    @Column(columnDefinition = "NUMERIC")
     private Double abv;
 
     private Integer price;

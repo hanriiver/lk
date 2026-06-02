@@ -42,6 +42,12 @@ public class Profile {
     @Column(columnDefinition = "TEXT")
     private String detail;
 
+    @Column(name = "photo_url", columnDefinition = "TEXT")
+    private String photoUrl;
+
+    @Column(name = "instagram_id", length = 100)
+    private String instagramId;
+
     @Column(name = "created_at", updatable = false)
     private Instant createdAt;
 

@@ -62,7 +62,7 @@ export default function Menu() {
       if (editing) await updateMenu(editing.id, fd)
       else         await createMenu(fd)
       setSheet(false); load(); toast(editing ? '수정 완료' : '등록 완료')
-    } catch { toast('저장 실패') }
+    } catch (e) { console.error('저장 실패', e?.response?.status, e?.response?.data); toast('저장 실패') }
   }
 
   const del = async (id) => {

@@ -9,12 +9,12 @@ import java.util.UUID;
 
 public interface MenuRepository extends JpaRepository<Menu, UUID> {
 
-    @Query("""
-        SELECT m FROM Menu m
+    @Query(value = """
+        SELECT * FROM menus m
         WHERE (:base IS NULL OR m.base = :base)
-          AND (:q IS NULL OR LOWER(m.name) LIKE LOWER(CONCAT('%', :q, '%'))
-                          OR LOWER(m.description) LIKE LOWER(CONCAT('%', :q, '%')))
-        ORDER BY m.createdAt DESC
-    """)
+          AND (:q IS NULL OR m.name ILIKE CONCAT('%', :q, '%')
+                          OR m.description ILIKE CONCAT('%', :q, '%'))
+        ORDER BY m.created_at DESC
+    """, nativeQuery = true)
     List<Menu> search(@Param("base") String base, @Param("q") String q);
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import BottomSheet from './BottomSheet'
 import { verifyPin } from '../api/authApi'
 import { useAdmin } from '../hooks/useAdmin'
@@ -7,50 +7,70 @@ import { useToast } from '../hooks/useToast'
 export default function PinPad({ open, onClose, hint }) {
   const [buf, setBuf] = useState('')
   const [err, setErr] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { login } = useAdmin()
   const toast = useToast()
+  const inputRef = useRef()
 
-  const press = async (k) => {
-    if (buf.length >= 4) return
-    const next = buf + k
-    setBuf(next)
-    if (next.length === 4) {
-      try {
-        const { token } = await verifyPin(next)
-        login(token)
-        onClose()
-        toast('관리자 모드 ON')
-      } catch {
-        setErr(true)
-        navigator.vibrate?.(80)
-        setTimeout(() => { setBuf(''); setErr(false) }, 500)
-      }
+  useEffect(() => {
+    if (open) {
+      setBuf(''); setErr(false)
+      setTimeout(() => inputRef.current?.focus(), 100)
+    }
+  }, [open])
+
+  const submit = async () => {
+    if (!buf || loading) return
+    setLoading(true)
+    try {
+      const { token } = await verifyPin(buf)
+      login(token)
+      onClose()
+      toast('관리자 모드 ON')
+    } catch {
+      setErr(true)
+      navigator.vibrate?.(80)
+      setTimeout(() => { setBuf(''); setErr(false) }, 600)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const del = () => setBuf(b => b.slice(0, -1))
-
-  const keys = ['1','2','3','4','5','6','7','8','9','blank','0','del']
+  const handleKey = (e) => {
+    if (e.key === 'Enter') submit()
+  }
 
   return (
     <BottomSheet open={open} onClose={onClose}>
       <div className="pin-wrap">
-        <div className="lock-big">🔒</div>
+        <div className="lock-big">{err ? '❌' : '🔒'}</div>
         <h3>관리자 모드</h3>
-        <p>{hint || '관리자 기능을 사용하려면 PIN을 입력하세요.'}</p>
-        <div className="pin-dots">
-          {[0,1,2,3].map(i => (
-            <div key={i} className={`pin-dot ${i < buf.length ? 'f' : ''} ${err ? 'err' : ''}`} />
-          ))}
+        <p>{hint || '비밀번호를 입력하세요.'}</p>
+
+        <input
+          ref={inputRef}
+          type="password"
+          className="inp"
+          style={{
+            textAlign: 'center',
+            letterSpacing: '0.2em',
+            fontSize: 18,
+            borderColor: err ? '#ff3b30' : undefined,
+            boxShadow: err ? '0 0 0 3px rgba(255,59,48,.2)' : undefined,
+          }}
+          placeholder="비밀번호"
+          value={buf}
+          onChange={e => { setBuf(e.target.value); setErr(false) }}
+          onKeyDown={handleKey}
+          autoComplete="off"
+        />
+
+        <div className="actions" style={{ marginTop: 16 }}>
+          <button className="btn ghost" onClick={onClose}>취소</button>
+          <button className="btn accent" onClick={submit} disabled={!buf || loading}>
+            {loading ? '확인 중…' : '확인'}
+          </button>
         </div>
-        <div className="keypad">
-          {keys.map((k, i) => {
-            if (k === 'blank') return <button key={i} className="key blank" disabled />
-            if (k === 'del')   return <button key={i} className="key del" onClick={del}>지움</button>
-            return <button key={i} className="key" onClick={() => press(k)}>{k}</button>
-          })}
-        </div>
-        <div className="pin-hint">기본 PIN: 1234</div>
       </div>
     </BottomSheet>
   )
