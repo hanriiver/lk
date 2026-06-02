@@ -61,8 +61,11 @@ export default function ProfileList() {
             <div key={p.id} className="card">
               <div className="prof-card">
                 <div className="prof-head">
-                  <div className="prof-avatar">{p.gender==='남성'?'👨':'👩'}</div>
-                  <div>
+                  {admin && p.photoUrl
+                    ? <img src={p.photoUrl} alt="" style={{ width:44, height:44, borderRadius:'50%', objectFit:'cover', flexShrink:0 }} />
+                    : <div className="prof-avatar">{p.gender==='남성'?'👨':'👩'}</div>
+                  }
+                  <div style={{ flex:1, minWidth:0 }}>
                     <div className="prof-name">{age(p.birthYear)}세 {p.gender}</div>
                     <div className="prof-sub">{p.job || '직업 미입력'}</div>
                   </div>
@@ -79,6 +82,14 @@ export default function ProfileList() {
 
                 {p.ideal  && <div className="prof-text">💛 {p.ideal}</div>}
                 {p.detail && <div className="prof-text" style={{marginTop:4}}>📝 {p.detail}</div>}
+
+                {admin && p.instagramId && (
+                  <div style={{ marginTop:8, display:'flex', alignItems:'center', gap:5 }}>
+                    <span style={{ fontSize:11, background:'rgba(10,132,255,.12)', color:'var(--accent)', borderRadius:6, padding:'3px 8px', fontWeight:600 }}>
+                      🔒 {p.instagramId}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           ))}

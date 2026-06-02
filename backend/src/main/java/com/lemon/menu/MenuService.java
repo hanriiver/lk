@@ -13,6 +13,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -75,7 +76,11 @@ public class MenuService {
     }
 
     private String uploadPhoto(MultipartFile file) throws IOException, InterruptedException {
-        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        String ext = Optional.ofNullable(file.getOriginalFilename())
+                .filter(n -> n.contains("."))
+                .map(n -> n.substring(n.lastIndexOf('.')))
+                .orElse("");
+        String fileName = UUID.randomUUID() + ext;
         String uploadUrl = supabaseUrl + "/storage/v1/object/" + bucket + "/" + fileName;
 
         HttpRequest request = HttpRequest.newBuilder()

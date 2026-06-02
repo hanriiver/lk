@@ -372,3 +372,85 @@ textarea.inp { resize: none; line-height: 1.55; }
 .dot-chinese { background: #ffd60a; }
 .dot-western { background: #5ac8fa; }
 .dot-etc     { background: #98989f; }
+
+/* ── Main page macOS window ── */
+.main-stage {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px 30px;
+  overflow-y: auto;
+}
+
+.mac-win {
+  width: 100%;
+  background: var(--bg);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06);
+}
+
+.mac-titlebar {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  background: #2a2a2c;
+  border-bottom: 1px solid rgba(0,0,0,.4);
+  position: relative;
+}
+
+.mac-lights { display: flex; gap: 8px; }
+.light-r, .light-y, .light-g {
+  width: 12px; height: 12px; border-radius: 50%;
+}
+.light-r { background: #ff5f57; }
+.light-y { background: #febc2e; }
+.light-g { background: #28c840; }
+
+.mac-ttl {
+  position: absolute; left: 0; right: 0;
+  text-align: center; font-size: 13px; font-weight: 600;
+  color: var(--sub); pointer-events: none;
+}
+
+.mac-winhead {
+  padding: 26px 22px 18px;
+  text-align: center;
+  border-bottom: 1px solid var(--hair);
+}
+.mac-logo {
+  font-size: 48px; line-height: 1;
+  margin-bottom: 13px;
+}
+.mac-winhead h1 {
+  margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -.4px;
+}
+.mac-winhead p {
+  margin: 6px 0 0; font-size: 13px; color: var(--sub); font-weight: 500;
+}
+
+.mac-list { padding: 8px; }
+
+.mac-row {
+  display: flex; align-items: center; gap: 13px;
+  padding: 13px 14px; border-radius: 9px;
+  cursor: pointer; transition: background .12s;
+}
+.mac-row:hover  { background: var(--card); }
+.mac-row:active { background: #3a3a3c; }
+
+.mac-ic {
+  width: 30px; height: 30px; border-radius: 8px;
+  flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+}
+.ic-menu    { background: #4a3a1a; }
+.ic-profile { background: #4a2230; }
+.ic-list    { background: #3a2c52; }
+.ic-food    { background: #1e3f2a; }
+.ic-guest   { background: #1d3350; }
+.ic-review  { background: #143d28; }
+
+.mac-lab  { flex: 1 1 auto; font-size: 16px; font-weight: 500; letter-spacing: -.2px; }
+.mac-chev { flex: 0 0 auto; color: var(--sub); opacity: .7; }
