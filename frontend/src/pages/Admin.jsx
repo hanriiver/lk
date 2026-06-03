@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAdmin } from '../hooks/useAdmin'
 import { useToast } from '../hooks/useToast'
 import { verifyPin } from '../api/authApi'
-import { generateQrUrl } from '../utils/qrUrl'
+import { QR_URL } from '../utils/qrUrl'
 
 export default function Admin() {
   const nav = useNavigate()
@@ -13,13 +13,7 @@ export default function Admin() {
   const [pin, setPin] = useState('')
   const [err, setErr] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [qrUrl, setQrUrl] = useState(null)
   const [copied, setCopied] = useState(false)
-
-  // 이미 로그인 상태면 바로 QR 화면
-  useEffect(() => {
-    if (admin) setQrUrl(generateQrUrl())
-  }, [admin])
 
   const submit = async (e) => {
     e.preventDefault()
@@ -28,7 +22,6 @@ export default function Admin() {
     try {
       const { token } = await verifyPin(pin)
       login(token)
-      setQrUrl(generateQrUrl())
       toast('관리자 로그인 완료')
     } catch {
       setErr(true)
@@ -39,19 +32,13 @@ export default function Admin() {
   }
 
   const copyQr = () => {
-    navigator.clipboard.writeText(qrUrl)
+    navigator.clipboard.writeText(QR_URL)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const refresh = () => {
-    setQrUrl(generateQrUrl())
-    setCopied(false)
-  }
-
   const handleLogout = () => {
     logout()
-    setQrUrl(null)
     setPin('')
     toast('로그아웃')
   }
@@ -67,7 +54,6 @@ export default function Admin() {
     }}>
 
       {!admin ? (
-        /* 로그인 폼 */
         <form onSubmit={submit} style={{ width: '100%', maxWidth: 360 }}>
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>🔐</div>
@@ -87,8 +73,7 @@ export default function Admin() {
               background: err ? 'rgba(255,59,48,.15)' : '#2c2c2e',
               color: '#f5f5f7', fontSize: 18, textAlign: 'center', letterSpacing: '0.2em',
               outline: err ? '2px solid #ff3b30' : '2px solid transparent',
-              boxSizing: 'border-box', fontFamily: 'inherit',
-              transition: 'outline .15s',
+              boxSizing: 'border-box', fontFamily: 'inherit', transition: 'outline .15s',
             }}
           />
 
@@ -119,12 +104,13 @@ export default function Admin() {
         </form>
 
       ) : (
-        /* QR 링크 관리 */
         <div style={{ width: '100%', maxWidth: 360 }}>
           <div style={{ textAlign: 'center', marginBottom: 28 }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>📲</div>
-            <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: '#f5f5f7' }}>QR 링크 관리</h2>
-            <p style={{ margin: '8px 0 0', fontSize: 14, color: '#98989f' }}>링크를 복사해서 QR코드를 만드세요</p>
+            <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: '#f5f5f7' }}>QR 링크</h2>
+            <p style={{ margin: '8px 0 0', fontSize: 14, color: '#98989f' }}>
+              이 링크로 QR코드를 한 번만 만들어 테이블에 붙여두세요
+            </p>
           </div>
 
           <div style={{
@@ -132,7 +118,7 @@ export default function Admin() {
             fontSize: 13, color: '#98989f', wordBreak: 'break-all', lineHeight: 1.7,
             marginBottom: 12,
           }}>
-            {qrUrl}
+            {QR_URL}
           </div>
 
           <button
@@ -148,21 +134,15 @@ export default function Admin() {
             {copied ? '✓ 복사됨!' : '링크 복사'}
           </button>
 
-          <button
-            onClick={refresh}
-            style={{
-              width: '100%', padding: '13px', borderRadius: 13, border: 0,
-              background: '#2c2c2e', color: '#f5f5f7',
-              fontSize: 15, fontWeight: 600, cursor: 'pointer',
-              fontFamily: 'inherit', marginBottom: 10,
-            }}
-          >
-            새 링크 생성
-          </button>
-
-          <p style={{ textAlign: 'center', fontSize: 12, color: '#636366', margin: '4px 0 20px' }}>
-            링크는 생성 시점부터 10분간 유효합니다
-          </p>
+          <div style={{
+            background: 'rgba(255,159,10,.08)', border: '0.5px solid rgba(255,159,10,.2)',
+            borderRadius: 10, padding: '10px 14px', marginBottom: 20,
+          }}>
+            <p style={{ margin: 0, fontSize: 12, color: '#ff9f0a', lineHeight: 1.6 }}>
+              QR을 스캔하면 10분간 접속 가능합니다.<br />
+              10분 후에는 QR을 다시 스캔해야 합니다.
+            </p>
+          </div>
 
           <button
             onClick={handleLogout}

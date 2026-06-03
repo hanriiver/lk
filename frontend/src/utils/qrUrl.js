@@ -1,7 +1,2 @@
-const BASE = 'https://lk-bice.vercel.app'
-
-// 현재 시각(초) 기준 QR URL 생성
-export function generateQrUrl() {
-  const t = Math.floor(Date.now() / 1000)
-  return `${BASE}?t=${t}`
-}
+// QR에 심을 고정 URL — 한 번 뽑으면 계속 사용
+export const QR_URL = 'https://lk-bice.vercel.app?from=qr'
