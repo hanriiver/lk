@@ -1,7 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const CATS = ['맥주', '칵테일', '위스키', '논알콜']
+const CATS = [
+  { key: '맥주',   color: '#f0a500', bg: 'rgba(240,165,0,.12)'   },
+  { key: '칵테일', color: '#e05c8a', bg: 'rgba(224,92,138,.12)'  },
+  { key: '위스키', color: '#c17f3e', bg: 'rgba(193,127,62,.12)'  },
+  { key: '논알콜', color: '#4caf7d', bg: 'rgba(76,175,125,.12)'  },
+  { key: '안주',   color: '#7b8ce8', bg: 'rgba(123,140,232,.12)' },
+]
 
 const IMAGES = {
   맥주: [
@@ -36,6 +42,7 @@ const IMAGES = {
     '/menus/cocktail/27.png',
   ],
   위스키: [],
+  안주: [],
   논알콜: [
     '/menus/nonalcohol/28.png',
     '/menus/nonalcohol/29.png',
@@ -48,6 +55,7 @@ export default function Menu() {
   const [cat, setCat] = useState('맥주')
 
   const images = IMAGES[cat] ?? []
+  const activeCat = CATS.find(c => c.key === cat)
 
   return (
     <div className="phone">
@@ -64,12 +72,33 @@ export default function Menu() {
       </div>
 
       {/* 카테고리 칩 */}
-      <div className="chipbar">
-        {CATS.map(c => (
-          <button key={c} className={`chip ${cat === c ? 'sel' : ''}`} onClick={() => setCat(c)}>
-            {c}
-          </button>
-        ))}
+      <div style={{
+        display: 'flex', gap: 8, overflowX: 'auto',
+        padding: '9px 14px', borderBottom: '0.5px solid var(--hair)',
+        background: 'rgba(28,28,30,.92)',
+        backdropFilter: 'saturate(180%) blur(16px)',
+        WebkitBackdropFilter: 'saturate(180%) blur(16px)',
+        scrollbarWidth: 'none',
+      }}>
+        {CATS.map(c => {
+          const sel = cat === c.key
+          return (
+            <button
+              key={c.key}
+              onClick={() => setCat(c.key)}
+              style={{
+                flexShrink: 0, padding: '7px 16px', borderRadius: 18,
+                border: `1px solid ${sel ? c.color : 'rgba(255,255,255,.1)'}`,
+                background: sel ? c.bg : 'var(--card)',
+                color: sel ? c.color : 'var(--sub)',
+                fontSize: 13.5, fontWeight: 600, cursor: 'pointer',
+                fontFamily: 'var(--font)', transition: 'all .15s',
+              }}
+            >
+              {c.key}
+            </button>
+          )
+        })}
       </div>
 
       {/* 이미지 리스트 */}
