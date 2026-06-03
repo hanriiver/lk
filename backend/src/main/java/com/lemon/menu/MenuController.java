@@ -28,7 +28,7 @@ public class MenuController {
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<ApiResponse<Menu>> createMenu(
             @Valid @RequestPart("data") MenuRequest req,
-            @RequestPart(value = "photo", required = false) MultipartFile photo) throws IOException, InterruptedException {
+            @RequestPart(value = "photo", required = false) MultipartFile photo) throws IOException {
         return ResponseEntity.status(201).body(ApiResponse.ok(menuService.createMenu(req, photo)));
     }
 
@@ -36,7 +36,7 @@ public class MenuController {
     public ApiResponse<Menu> updateMenu(
             @PathVariable UUID id,
             @RequestPart("data") MenuRequest req,
-            @RequestPart(value = "photo", required = false) MultipartFile photo) throws IOException, InterruptedException {
+            @RequestPart(value = "photo", required = false) MultipartFile photo) throws IOException {
         return ApiResponse.ok(menuService.updateMenu(id, req, photo));
     }
 

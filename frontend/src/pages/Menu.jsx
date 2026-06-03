@@ -25,13 +25,20 @@ export default function Menu() {
   const [photo, setPhoto]   = useState(null)
   const [preview, setPreview] = useState(null)
   const fileRef = useRef()
+  const debounceRef = useRef(null)
 
-  const load = async () => {
-    try { setItems(await getMenus(base === '전체' ? '' : base, q)) }
+  const load = async (b, query) => {
+    try { setItems(await getMenus(b === '전체' ? '' : b, query)) }
     catch { toast('불러오기 실패') }
   }
 
-  useEffect(() => { load() }, [base, q])
+  useEffect(() => { load(base, q) }, [base])
+
+  useEffect(() => {
+    clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => load(base, q), 300)
+    return () => clearTimeout(debounceRef.current)
+  }, [q])
 
   const openAdd = () => {
     setEditing(null)
@@ -61,13 +68,13 @@ export default function Menu() {
     try {
       if (editing) await updateMenu(editing.id, fd)
       else         await createMenu(fd)
-      setSheet(false); load(); toast(editing ? '수정 완료' : '등록 완료')
+      setSheet(false); load(base, q); toast(editing ? '수정 완료' : '등록 완료')
     } catch (e) { console.error('저장 실패', e?.response?.status, e?.response?.data); toast('저장 실패') }
   }
 
   const del = async (id) => {
     if (!confirm('삭제하시겠습니까?')) return
-    try { await deleteMenu(id); load(); toast('삭제 완료') }
+    try { await deleteMenu(id); load(base, q); toast('삭제 완료') }
     catch { toast('삭제 실패') }
   }
 

@@ -117,8 +117,9 @@ export default function Main() {
           </div>
 
           <div className="mac-winhead">
-            <div className="mac-logo">🍋</div>
-            <h1>레몬과 김부각</h1>
+            <div className="mac-logo">
+              <img src="/logo.png" alt="레몬과 김부각" className="main-logo-img" />
+            </div>
             <p>무엇을 해볼까요?</p>
           </div>
 

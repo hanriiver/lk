@@ -141,7 +141,7 @@ export default function ProfileForm() {
 
           <div className="field">
             <div className="field-label">이상형 (간단히)</div>
-            <input className="inp" placeholder="예: 유머있고 따뜻한 분" value={form.ideal} onChange={f('ideal')} />
+            <input className="inp" placeholder="예: 고양이상, 강아지상, 토끼상, 키 큰 사람, 느낌 좋은 사람" value={form.ideal} onChange={f('ideal')} />
           </div>
 
           <div className="field">
@@ -155,7 +155,7 @@ export default function ProfileForm() {
               인스타 아이디
               <span style={{ marginLeft:6, fontSize:11, color:'var(--accent)', fontWeight:600 }}>🔒 사장님만 공개</span>
             </div>
-            <input className="inp" placeholder="예: @lemon_kim (선택)" value={form.instagramId} onChange={f('instagramId')} />
+            <input className="inp" placeholder="예: lemonkimbugak (선택)" value={form.instagramId} onChange={f('instagramId')} />
           </div>
 
           <button className="btn accent" style={{ width:'100%', marginTop:6 }} onClick={submit}>등록하기</button>
