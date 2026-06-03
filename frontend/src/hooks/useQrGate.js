@@ -1,26 +1,14 @@
 const WINDOW_MS = 10 * 60 * 1000 // 10분
-
-// QR URL의 ?t= 값이 현재 시각 기준 10분 이내인지 확인
-function isTokenValid(t) {
-  const ts = parseInt(t, 10)
-  if (isNaN(ts)) return false
-  const diff = Date.now() - ts * 1000
-  return diff >= 0 && diff < WINDOW_MS
-}
-
 const STORAGE_KEY = 'qr_access_ts'
 
 export function initQrGate() {
   const params = new URLSearchParams(window.location.search)
-  const t = params.get('t')
 
-  if (t && isTokenValid(t)) {
-    // 유효한 QR 토큰 — 접속 시간 저장
+  // QR로 접속한 경우 (?from=qr)
+  if (params.get('from') === 'qr') {
     sessionStorage.setItem(STORAGE_KEY, Date.now().toString())
-    // URL에서 ?t= 제거 (깔끔하게)
-    const url = new URL(window.location.href)
-    url.searchParams.delete('t')
-    window.history.replaceState({}, '', url.toString())
+    // URL에서 파라미터 제거
+    window.history.replaceState({}, '', window.location.pathname)
     return true
   }
 
@@ -29,7 +17,6 @@ export function initQrGate() {
   if (stored) {
     const diff = Date.now() - parseInt(stored, 10)
     if (diff < WINDOW_MS) return true
-    // 만료 — 세션 삭제
     sessionStorage.removeItem(STORAGE_KEY)
   }
 
