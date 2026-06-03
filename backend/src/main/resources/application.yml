@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://${SUPABASE_DB_HOST}:${SUPABASE_DB_PORT:6543}/postgres?prepareThreshold=0}
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://${SUPABASE_DB_HOST}:${SUPABASE_DB_PORT:6543}/postgres?prepareThreshold=0}
     username: ${PGUSER:${SUPABASE_DB_USERNAME:postgres}}
     password: ${PGPASSWORD:${SUPABASE_DB_PASSWORD:}}
     driver-class-name: org.postgresql.Driver
