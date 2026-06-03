@@ -380,26 +380,19 @@ textarea.inp { resize: none; line-height: 1.55; }
 }
 
 .mac-winhead {
-  padding: 28px 24px 20px;
+  padding: 36px 24px 22px;
   text-align: center;
   border-bottom: 1px solid var(--hair);
 }
 .mac-logo {
-  line-height: 1;
-  margin-bottom: 6px;
-}
-.main-logo-img {
-  width: 72%;
-  max-width: 280px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+  font-size: 64px; line-height: 1;
+  margin-bottom: 16px;
 }
 .mac-winhead h1 {
   margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -.4px;
 }
 .mac-winhead p {
-  margin: 4px 0 0; font-size: 14px; color: var(--sub); font-weight: 500;
+  margin: 8px 0 0; font-size: 14px; color: var(--sub); font-weight: 500;
 }
 
 .mac-list { padding: 10px; }
