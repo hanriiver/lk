@@ -86,21 +86,18 @@ export default function Menu() {
         ) : (
           <div style={{ padding: '12px 14px 40px', display: 'flex', flexDirection: 'column', gap: 12 }}>
             {images.map((src, i) => (
-              <div key={i} style={{
-                width: '100%',
-                height: '44vh',
-                borderRadius: 18,
-                overflow: 'hidden',
-                background: 'var(--card)',
-                flexShrink: 0,
-              }}>
-                <img
-                  src={src}
-                  alt=""
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                  loading="lazy"
-                />
-              </div>
+              <img
+                key={i}
+                src={src}
+                alt=""
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  borderRadius: 18,
+                  display: 'block',
+                }}
+                loading="lazy"
+              />
             ))}
           </div>
         )}
