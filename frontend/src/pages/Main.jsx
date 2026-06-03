@@ -1,8 +1,5 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import StatusBar from '../components/StatusBar'
-import { useAdmin } from '../hooks/useAdmin'
-import { generateQrUrl } from '../utils/qrUrl'
 
 const REVIEW_URL = 'https://map.naver.com/p/search/' + encodeURIComponent('레몬과 김부각')
 
@@ -94,17 +91,6 @@ const Chevron = () => (
 
 export default function Main() {
   const nav = useNavigate()
-  const { admin } = useAdmin()
-  const [qrUrl, setQrUrl] = useState(null)
-  const [copied, setCopied] = useState(false)
-
-  const showQr = () => setQrUrl(generateQrUrl())
-
-  const copyQr = () => {
-    navigator.clipboard.writeText(qrUrl)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
 
   const handleRow = (row) => {
     if (row.key === 'review') {
@@ -146,44 +132,6 @@ export default function Main() {
             ))}
           </div>
 
-          {admin && (
-            <div style={{ padding: '8px 12px 14px', borderTop: '1px solid var(--hair)' }}>
-              <button
-                onClick={showQr}
-                style={{
-                  width: '100%', padding: '11px', borderRadius: 10, border: 0,
-                  background: 'rgba(10,132,255,.12)', color: 'var(--accent)',
-                  fontFamily: 'var(--font)', fontSize: 14, fontWeight: 600, cursor: 'pointer',
-                }}
-              >
-                QR 링크 생성
-              </button>
-              {qrUrl && (
-                <div style={{ marginTop: 10 }}>
-                  <div style={{
-                    background: 'var(--card)', borderRadius: 10, padding: '10px 12px',
-                    fontSize: 12, color: 'var(--sub)', wordBreak: 'break-all', lineHeight: 1.6,
-                  }}>
-                    {qrUrl}
-                  </div>
-                  <button
-                    onClick={copyQr}
-                    style={{
-                      marginTop: 8, width: '100%', padding: '10px', borderRadius: 10, border: 0,
-                      background: copied ? 'rgba(48,209,88,.15)' : 'var(--card)',
-                      color: copied ? '#30d158' : 'var(--ink)',
-                      fontFamily: 'var(--font)', fontSize: 14, fontWeight: 600, cursor: 'pointer',
-                    }}
-                  >
-                    {copied ? '복사됨!' : '링크 복사'}
-                  </button>
-                  <p style={{ margin: '8px 0 0', fontSize: 11, color: 'var(--sub)', textAlign: 'center' }}>
-                    이 링크로 QR코드를 만들어 테이블에 붙여두세요 (10분 유효)
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </div>
