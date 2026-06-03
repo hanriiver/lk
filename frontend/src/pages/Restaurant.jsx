@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import StatusBar from '../components/StatusBar'
 import LockButton from '../components/LockButton'
@@ -22,13 +22,20 @@ export default function Restaurant() {
   const [sheet, setSheet]   = useState(false)
   const [editing, setEditing] = useState(null)
   const [form, setForm]     = useState({ name:'', category:'한식', location:'', recommender:'', review:'', recMenus:'' })
+  const debounceRef = useRef(null)
 
-  const load = async () => {
-    try { setItems(await getRestaurants(cat==='전체'?'':cat, q)) }
+  const load = async (category, query) => {
+    try { setItems(await getRestaurants(category==='전체'?'':category, query)) }
     catch { toast('불러오기 실패') }
   }
 
-  useEffect(() => { load() }, [cat, q])
+  useEffect(() => { load(cat, q) }, [cat])
+
+  useEffect(() => {
+    clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => load(cat, q), 300)
+    return () => clearTimeout(debounceRef.current)
+  }, [q])
 
   const openAdd = () => {
     setEditing(null)
@@ -55,13 +62,13 @@ export default function Restaurant() {
     try {
       if (editing) await updateRestaurant(editing.id, body)
       else         await createRestaurant(body)
-      setSheet(false); load(); toast(editing ? '수정 완료' : '등록 완료')
+      setSheet(false); load(cat, q); toast(editing ? '수정 완료' : '등록 완료')
     } catch { toast('저장 실패') }
   }
 
   const del = async (id) => {
     if (!confirm('삭제하시겠습니까?')) return
-    try { await deleteRestaurant(id); load(); toast('삭제 완료') }
+    try { await deleteRestaurant(id); load(cat, q); toast('삭제 완료') }
     catch { toast('삭제 실패') }
   }
 
@@ -131,13 +138,13 @@ export default function Restaurant() {
             {CATS.filter(c=>c!=='전체').map(c=><option key={c}>{c}</option>)}
           </select></div>
         <div className="field"><div className="field-label">위치</div>
-          <input className="inp" value={form.location} onChange={e=>setForm(f=>({...f,location:e.target.value}))} placeholder="예: 홍대입구역 3번 출구" /></div>
+          <input className="inp" value={form.location} onChange={e=>setForm(f=>({...f,location:e.target.value}))} placeholder="예: 을지로3가역" /></div>
         <div className="field"><div className="field-label">추천인</div>
-          <input className="inp" value={form.recommender} onChange={e=>setForm(f=>({...f,recommender:e.target.value}))} placeholder="예: 바텐더 김씨" /></div>
+          <input className="inp" value={form.recommender} onChange={e=>setForm(f=>({...f,recommender:e.target.value}))} placeholder="예: 레김" /></div>
         <div className="field"><div className="field-label">리뷰</div>
           <textarea className="inp" rows={3} value={form.review} onChange={e=>setForm(f=>({...f,review:e.target.value}))} placeholder="간단한 후기" /></div>
         <div className="field"><div className="field-label">추천 메뉴 (쉼표 구분)</div>
-          <input className="inp" value={form.recMenus} onChange={e=>setForm(f=>({...f,recMenus:e.target.value}))} placeholder="예: 삼겹살, 된장찌개" /></div>
+          <input className="inp" value={form.recMenus} onChange={e=>setForm(f=>({...f,recMenus:e.target.value}))} placeholder="예: 위스키 사워" /></div>
         <div className="actions">
           <button className="btn ghost" onClick={() => setSheet(false)}>취소</button>
           <button className="btn primary" onClick={submit}>저장</button>
