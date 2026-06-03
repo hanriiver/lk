@@ -81,10 +81,12 @@ export default function Menu() {
       <div style={{
         display: 'flex', gap: 8, overflowX: 'auto',
         padding: '9px 14px', borderBottom: '0.5px solid var(--hair)',
-        background: 'rgba(28,28,30,.92)',
+        background: 'rgba(28,28,30,.98)',
         backdropFilter: 'saturate(180%) blur(16px)',
         WebkitBackdropFilter: 'saturate(180%) blur(16px)',
         scrollbarWidth: 'none',
+        position: 'relative', zIndex: 20,
+        flexShrink: 0,
       }}>
         {CATS.map(c => {
           const sel = cat === c.key
