@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,11 +27,11 @@ public class ProfileController {
 
     private final ProfileRepository profileRepository;
 
-    @Value("${supabase.url}")
-    private String supabaseUrl;
+    @Value("${app.upload-dir:/app/uploads}")
+    private String uploadDir;
 
-    @Value("${supabase.service-role-key}")
-    private String serviceRoleKey;
+    @Value("${app.base-url:http://localhost:8080}")
+    private String baseUrl;
 
     @GetMapping
     public ApiResponse<?> getProfiles(@RequestParam(required = false) String gender) {
@@ -50,7 +49,7 @@ public class ProfileController {
     public ResponseEntity<ApiResponse<Profile>> create(
             @RequestPart("data") ProfileRequest req,
             @RequestPart(value = "photo", required = false) MultipartFile photo
-    ) throws IOException, InterruptedException {
+    ) throws IOException {
         String photoUrl = photo != null && !photo.isEmpty() ? uploadPhoto(photo) : null;
         Profile profile = Profile.builder()
                 .gender(req.getGender())
@@ -77,23 +76,16 @@ public class ProfileController {
         return ApiResponse.ok();
     }
 
-    private String uploadPhoto(MultipartFile file) throws IOException, InterruptedException {
+    private String uploadPhoto(MultipartFile file) throws IOException {
         String ext = Optional.ofNullable(file.getOriginalFilename())
                 .filter(n -> n.contains("."))
                 .map(n -> n.substring(n.lastIndexOf('.')))
                 .orElse("");
         String fileName = UUID.randomUUID() + ext;
-        String uploadUrl = supabaseUrl + "/storage/v1/object/profiles/" + fileName;
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(uploadUrl))
-                .header("Authorization", "Bearer " + serviceRoleKey)
-                .header("Content-Type", file.getContentType())
-                .POST(HttpRequest.BodyPublishers.ofByteArray(file.getBytes()))
-                .build();
-
-        HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        return supabaseUrl + "/storage/v1/object/public/profiles/" + fileName;
+        Path dir = Paths.get(uploadDir, "profiles");
+        Files.createDirectories(dir);
+        Files.write(dir.resolve(fileName), file.getBytes());
+        return baseUrl + "/uploads/profiles/" + fileName;
     }
 
     @Data
