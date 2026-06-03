@@ -38,9 +38,10 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,  "/api/v1/profiles/**").permitAll()
                 .requestMatchers(HttpMethod.GET,  "/api/v1/restaurants/**").permitAll()
                 .requestMatchers(HttpMethod.GET,  "/api/v1/guestbook/**").permitAll()
-                // 방명록·프로필 작성은 누구나
+                // 방명록·프로필·맛집 작성은 누구나
                 .requestMatchers(HttpMethod.POST, "/api/v1/guestbook").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/profiles").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/restaurants").permitAll()
                 // 나머지(관리자)는 JWT 필요
                 .anyRequest().authenticated()
             )

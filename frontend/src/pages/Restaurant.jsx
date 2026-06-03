@@ -120,7 +120,7 @@ export default function Restaurant() {
         </div>
       </div>
 
-      {admin && <button className="fab" onClick={openAdd}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12h14"/></svg></button>}
+      <button className="fab" onClick={openAdd}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12h14"/></svg></button>
 
       <BottomSheet open={sheet} onClose={() => setSheet(false)}>
         <div className="form-title">{editing ? '맛집 수정' : '맛집 등록'}</div>
