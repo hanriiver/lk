@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const CATS = [
@@ -53,9 +53,15 @@ const IMAGES = {
 export default function Menu() {
   const nav = useNavigate()
   const [cat, setCat] = useState('맥주')
+  const scrollRef = useRef(null)
 
   const images = IMAGES[cat] ?? []
   const activeCat = CATS.find(c => c.key === cat)
+
+  const changeCat = (key) => {
+    setCat(key)
+    scrollRef.current?.scrollTo({ top: 0, behavior: 'instant' })
+  }
 
   return (
     <div className="phone">
@@ -85,7 +91,7 @@ export default function Menu() {
           return (
             <button
               key={c.key}
-              onClick={() => setCat(c.key)}
+              onClick={() => changeCat(c.key)}
               style={{
                 flexShrink: 0, padding: '7px 16px', borderRadius: 18,
                 border: `1px solid ${sel ? c.color : 'rgba(255,255,255,.1)'}`,
@@ -102,7 +108,7 @@ export default function Menu() {
       </div>
 
       {/* 이미지 리스트 */}
-      <div className="scroll">
+      <div className="scroll" ref={scrollRef}>
         {images.length === 0 ? (
           <div style={{
             display: 'flex', flexDirection: 'column',
