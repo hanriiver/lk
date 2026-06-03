@@ -1,6 +1,9 @@
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AdminProvider } from './hooks/useAdmin'
 import { ToastProvider } from './hooks/useToast'
+import { initQrGate, getRemainingMs } from './hooks/useQrGate'
+import QrBlock from './pages/QrBlock'
 import Main from './pages/Main'
 import Menu from './pages/Menu'
 import ProfileForm from './pages/ProfileForm'
@@ -9,6 +12,18 @@ import Restaurant from './pages/Restaurant'
 import Guestbook from './pages/Guestbook'
 
 export default function App() {
+  const [allowed, setAllowed] = useState(() => initQrGate())
+
+  useEffect(() => {
+    if (!allowed) return
+    const remaining = getRemainingMs()
+    if (remaining <= 0) { setAllowed(false); return }
+    const timer = setTimeout(() => setAllowed(false), remaining)
+    return () => clearTimeout(timer)
+  }, [allowed])
+
+  if (!allowed) return <QrBlock />
+
   return (
     <AdminProvider>
       <ToastProvider>
