@@ -29,30 +29,25 @@ body {
   color: var(--ink);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
   overflow: hidden;
 }
 
-/* ── Phone frame ── */
+/* ── Full-screen mobile container ── */
 .phone {
   position: relative;
-  width: 100%;
-  max-width: 480px;
-  height: 100vh;
+  width: 100vw;
+  height: 100dvh;
   background: var(--bg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* ── Dynamic island (hidden) ── */
-.island { display: none; }
-
-/* ── Status bar (hidden) ── */
+/* ── Dynamic island / status bar: hidden ── */
+.island  { display: none; }
 .statusbar { display: none; }
-
 .statusbar .right { display: flex; align-items: center; gap: 6px; }
 
 /* ── Scroll area ── */
@@ -65,7 +60,7 @@ body {
 .scroll::-webkit-scrollbar { width: 0; }
 
 /* ── Large header ── */
-.lhead { padding: 6px 20px 8px; background: var(--bg); }
+.lhead { padding: 14px 20px 10px; background: var(--bg); }
 .lhead .toprow { display: flex; align-items: center; justify-content: space-between; }
 .lhead h1 { font-size: 28px; font-weight: 700; letter-spacing: -.6px; margin: 0; }
 .lhead .count { font-size: 13px; color: var(--sub); margin-top: 3px; font-weight: 500; }
@@ -125,7 +120,8 @@ body {
 
 /* ── FAB ── */
 .fab {
-  position: absolute; right: 18px; bottom: 24px;
+  position: absolute; right: 20px;
+  bottom: calc(24px + env(safe-area-inset-bottom));
   width: 56px; height: 56px; border-radius: 50%;
   background: var(--food); color: #fff; border: 0; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
@@ -347,17 +343,16 @@ textarea.inp { resize: none; line-height: 1.55; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 20px 40px;
+  padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
   overflow-y: auto;
 }
 
 .mac-win {
   width: 100%;
-  max-width: 440px;
   background: var(--bg);
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 30px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.06);
 }
 
 .mac-titlebar {
