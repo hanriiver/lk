@@ -1,19 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const CATS = ['맥주', '칵테일', '위스키']
+const CATS = ['맥주', '칵테일', '위스키', '논알콜']
 
-// 이미지 파일을 public/menus/beer/, cocktail/, whiskey/ 에 넣으면 자동으로 표시됩니다
 const IMAGES = {
-  맥주: [
-    // 예: '/menus/beer/irish-car-bomb.jpg',
-  ],
-  칵테일: [
-    // 예: '/menus/cocktail/mojito.jpg',
-  ],
-  위스키: [
-    // 예: '/menus/whiskey/boilermaker.jpg',
-  ],
+  맥주: [],
+  칵테일: [],
+  위스키: [],
+  논알콜: [],
 }
 
 export default function Menu() {
