@@ -21,10 +21,9 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
 
-supabase:
-  url: ${SUPABASE_URL}
-  service-role-key: ${SUPABASE_SERVICE_ROLE_KEY}
-  storage-bucket: menus
+app:
+  upload-dir: ${UPLOAD_DIR:/app/uploads}
+  base-url: ${APP_BASE_URL:http://localhost:8080}
 
 jwt:
   secret: ${JWT_SECRET}
