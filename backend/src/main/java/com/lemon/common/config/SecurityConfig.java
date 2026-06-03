@@ -34,7 +34,6 @@ public class SecurityConfig {
                 // 인증 없이 접근 가능
                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/verify-pin").permitAll()
                 .requestMatchers(HttpMethod.GET,  "/uploads/**").permitAll()
-                .requestMatchers(HttpMethod.GET,  "/api/v1/menus/**").permitAll()
                 .requestMatchers(HttpMethod.GET,  "/api/v1/profiles/**").permitAll()
                 .requestMatchers(HttpMethod.GET,  "/api/v1/restaurants/**").permitAll()
                 .requestMatchers(HttpMethod.GET,  "/api/v1/guestbook/**").permitAll()
