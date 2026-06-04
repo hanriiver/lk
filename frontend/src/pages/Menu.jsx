@@ -9,37 +9,20 @@ const CATS = [
   { key: '안주',   color: '#7b8ce8', bg: 'rgba(123,140,232,.12)' },
 ]
 
+const COCKTAIL_SUBS = [
+  { key: '진',     folder: 'gin'     },
+  { key: '보드카', folder: 'vodka'   },
+  { key: '테킬라', folder: 'tequila' },
+  { key: '럼',     folder: 'rum'     },
+  { key: '위스키', folder: 'whiskey' },
+  { key: '리큐르', folder: 'liqueur' },
+  { key: '고도수', folder: 'strong'  },
+]
+
 const IMAGES = {
   맥주: [
     '/menus/beer/1.png',
     '/menus/beer/2.png',
-  ],
-  칵테일: [
-    '/menus/cocktail/3.png',
-    '/menus/cocktail/4.png',
-    '/menus/cocktail/5.png',
-    '/menus/cocktail/6.png',
-    '/menus/cocktail/7.png',
-    '/menus/cocktail/8.png',
-    '/menus/cocktail/9.png',
-    '/menus/cocktail/10.png',
-    '/menus/cocktail/11.png',
-    '/menus/cocktail/12.png',
-    '/menus/cocktail/13.png',
-    '/menus/cocktail/14.png',
-    '/menus/cocktail/15.png',
-    '/menus/cocktail/16.png',
-    '/menus/cocktail/17.png',
-    '/menus/cocktail/18.png',
-    '/menus/cocktail/19.png',
-    '/menus/cocktail/20.png',
-    '/menus/cocktail/21.png',
-    '/menus/cocktail/22.png',
-    '/menus/cocktail/23.png',
-    '/menus/cocktail/24.png',
-    '/menus/cocktail/25.png',
-    '/menus/cocktail/26.png',
-    '/menus/cocktail/27.png',
   ],
   위스키: [],
   안주: [],
@@ -50,16 +33,37 @@ const IMAGES = {
   ],
 }
 
+const COCKTAIL_IMAGES = {
+  gin:     [],
+  vodka:   [],
+  tequila: [],
+  rum:     [],
+  whiskey: [],
+  liqueur: [],
+  strong:  [],
+}
+
 export default function Menu() {
   const nav = useNavigate()
   const [cat, setCat] = useState('맥주')
+  const [cocktailSub, setCocktailSub] = useState('gin')
   const scrollRef = useRef(null)
 
-  const images = IMAGES[cat] ?? []
   const activeCat = CATS.find(c => c.key === cat)
+
+  const getImages = () => {
+    if (cat === '칵테일') return COCKTAIL_IMAGES[cocktailSub] ?? []
+    return IMAGES[cat] ?? []
+  }
+  const images = getImages()
 
   const changeCat = (key) => {
     setCat(key)
+    scrollRef.current?.scrollTo({ top: 0, behavior: 'instant' })
+  }
+
+  const changeSub = (folder) => {
+    setCocktailSub(folder)
     scrollRef.current?.scrollTo({ top: 0, behavior: 'instant' })
   }
 
@@ -77,10 +81,11 @@ export default function Menu() {
         <h1>메뉴판 🍺</h1>
       </div>
 
-      {/* 카테고리 칩 */}
+      {/* 메인 카테고리 칩 */}
       <div style={{
         display: 'flex', gap: 8, overflowX: 'auto',
-        padding: '9px 14px', borderBottom: '0.5px solid var(--hair)',
+        padding: '9px 14px',
+        borderBottom: cat === '칵테일' ? 'none' : '0.5px solid var(--hair)',
         background: 'rgba(28,28,30,.98)',
         backdropFilter: 'saturate(180%) blur(16px)',
         WebkitBackdropFilter: 'saturate(180%) blur(16px)',
@@ -108,6 +113,38 @@ export default function Menu() {
           )
         })}
       </div>
+
+      {/* 칵테일 세부 카테고리 칩 */}
+      {cat === '칵테일' && (
+        <div style={{
+          display: 'flex', gap: 6, overflowX: 'auto',
+          padding: '7px 14px', borderBottom: '0.5px solid var(--hair)',
+          background: 'rgba(28,28,30,.98)',
+          scrollbarWidth: 'none',
+          position: 'relative', zIndex: 20,
+          flexShrink: 0,
+        }}>
+          {COCKTAIL_SUBS.map(s => {
+            const sel = cocktailSub === s.folder
+            return (
+              <button
+                key={s.folder}
+                onClick={() => changeSub(s.folder)}
+                style={{
+                  flexShrink: 0, padding: '5px 13px', borderRadius: 14,
+                  border: `1px solid ${sel ? activeCat.color : 'rgba(255,255,255,.08)'}`,
+                  background: sel ? activeCat.bg : 'transparent',
+                  color: sel ? activeCat.color : 'var(--sub)',
+                  fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
+                  fontFamily: 'var(--font)', transition: 'all .15s',
+                }}
+              >
+                {s.key}
+              </button>
+            )
+          })}
+        </div>
+      )}
 
       {/* 이미지 리스트 */}
       <div className="scroll" ref={scrollRef}>
