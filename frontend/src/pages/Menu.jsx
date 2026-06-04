@@ -24,7 +24,10 @@ const IMAGES = {
     '/menus/beer/1.png',
     '/menus/beer/2.png',
   ],
-  위스키: [],
+  위스키: [
+    '/menus/whiskey/12.png',
+    '/menus/whiskey/13.png',
+  ],
   안주: [],
   논알콜: [
     '/menus/nonalcohol/28.png',
