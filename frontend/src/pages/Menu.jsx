@@ -158,7 +158,7 @@ export default function Menu() {
             <p style={{ margin: 0, fontSize: 15 }}>메뉴 이미지를 준비 중입니다</p>
           </div>
         ) : (
-          <div style={{ padding: '12px 14px 40px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ padding: '12px 24px 40px', display: 'flex', flexDirection: 'column', gap: 12 }}>
             {images.map((src, i) => (
               <img
                 key={i}
