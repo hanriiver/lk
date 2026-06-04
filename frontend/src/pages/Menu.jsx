@@ -34,13 +34,13 @@ const IMAGES = {
 }
 
 const COCKTAIL_IMAGES = {
-  gin:     [],
-  vodka:   [],
-  tequila: [],
-  rum:     [],
-  whiskey: [],
-  liqueur: [],
-  strong:  [],
+  gin:     [3,4,5,6,7,8].map(n => `/menus/cocktail/gin/${n}.png`),
+  vodka:   [9,10,11].map(n => `/menus/cocktail/vodka/${n}.png`),
+  rum:     [12,13,14,15].map(n => `/menus/cocktail/rum/${n}.png`),
+  tequila: [16,17,18].map(n => `/menus/cocktail/tequila/${n}.png`),
+  whiskey: [19,20,21].map(n => `/menus/cocktail/whiskey/${n}.png`),
+  liqueur: [22,23,24].map(n => `/menus/cocktail/liqueur/${n}.png`),
+  strong:  [25,26,27].map(n => `/menus/cocktail/strong/${n}.png`),
 }
 
 export default function Menu() {
